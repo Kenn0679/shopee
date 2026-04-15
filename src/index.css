@@ -1,63 +1,60 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import 'tailwindcss';
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
     /* Shopee Orange brand palette */
-    --background: oklch(1 0 0); /* warm off-white with orange tint */
-    --foreground: oklch(0.145 0 0); /* near-black warm */
+    --background: oklch(0.97 0.005 30); /* warm off-white with orange tint */
+    --foreground: oklch(0.2 0.01 30); /* near-black warm */
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
+    --card-foreground: oklch(0.2 0.01 30);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
+    --popover-foreground: oklch(0.2 0.01 30);
 
     /* Shopee signature orange #EE4D2D */
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.59 0.215 33);
+    --primary-foreground: oklch(1 0 0);
 
     /* Shopee light orange for hover/secondary surfaces */
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.96 0.03 35);
+    --secondary-foreground: oklch(0.59 0.215 33);
 
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
+    --muted: oklch(0.97 0.01 30);
+    --muted-foreground: oklch(0.5 0.02 30);
 
     /* Light orange accent */
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --accent: oklch(0.94 0.05 35);
+    --accent-foreground: oklch(0.59 0.215 33);
 
-    --destructive: oklch(0.577 0.245 27.325);
+    --destructive: oklch(0.55 0.22 25);
     --destructive-foreground: oklch(1 0 0);
 
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --border: oklch(0.88 0.015 30);
+    --input: oklch(0.95 0.008 30);
+    --ring: oklch(0.59 0.215 33);
 
     /* Chart colors: orange, red, warm yellow, brown, warm gray */
-    --chart-1: oklch(0.87 0 0); /* Shopee orange */
-    --chart-2: oklch(0.556 0 0); /* Shopee red */
-    --chart-3: oklch(0.439 0 0); /* warm yellow */
-    --chart-4: oklch(0.371 0 0); /* brown */
-    --chart-5: oklch(0.269 0 0); /* warm gray */
+    --chart-1: oklch(0.59 0.215 33); /* Shopee orange */
+    --chart-2: oklch(0.52 0.2 25); /* Shopee red */
+    --chart-3: oklch(0.75 0.15 55); /* warm yellow */
+    --chart-4: oklch(0.55 0.1 42); /* brown */
+    --chart-5: oklch(0.65 0.02 30); /* warm gray */
 
     /* Sidebar: white with orange accents */
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar: oklch(1 0 0);
+    --sidebar-foreground: oklch(0.2 0.01 30);
+    --sidebar-primary: oklch(0.59 0.215 33);
+    --sidebar-primary-foreground: oklch(1 0 0);
+    --sidebar-accent: oklch(0.94 0.05 35);
+    --sidebar-accent-foreground: oklch(0.59 0.215 33);
+    --sidebar-border: oklch(0.88 0.015 30);
+    --sidebar-ring: oklch(0.59 0.215 33);
 
     --font-family: 'Montserrat', sans-serif;
     --font-serif: Source Serif 4, serif;
     --font-mono: JetBrains Mono, monospace;
-    --radius: 0.625rem; /* Shopee uses tighter/squarer corners */
+    --radius: 0.25rem; /* Shopee uses tighter/squarer corners */
     --shadow-x: 0px;
     --shadow-y: 1px;
     --shadow-blur: 3px;
@@ -78,47 +75,47 @@
 
 .dark {
     /* Shopee dark mode — deeper orange-tinged darks */
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
+    --background: oklch(0.16 0.015 25);
+    --foreground: oklch(0.92 0.008 30);
+    --card: oklch(0.2 0.018 25);
+    --card-foreground: oklch(0.92 0.008 30);
+    --popover: oklch(0.18 0.015 25);
+    --popover-foreground: oklch(0.92 0.008 30);
 
     /* Shopee orange stays consistent */
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
+    --primary: oklch(0.59 0.215 33);
+    --primary-foreground: oklch(1 0 0);
 
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.26 0.03 28);
+    --secondary-foreground: oklch(0.92 0.008 30);
 
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
+    --muted: oklch(0.26 0.03 28);
+    --muted-foreground: oklch(0.65 0.02 30);
 
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --accent: oklch(0.3 0.06 30);
+    --accent-foreground: oklch(0.8 0.12 35);
 
-    --destructive: oklch(0.704 0.191 22.216);
+    --destructive: oklch(0.55 0.22 25);
     --destructive-foreground: oklch(1 0 0);
 
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
+    --border: oklch(0.32 0.025 28);
+    --input: oklch(0.32 0.025 28);
+    --ring: oklch(0.59 0.215 33);
 
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+    --chart-1: oklch(0.59 0.215 33);
+    --chart-2: oklch(0.52 0.2 25);
+    --chart-3: oklch(0.75 0.15 55);
+    --chart-4: oklch(0.55 0.1 42);
+    --chart-5: oklch(0.65 0.02 30);
 
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --sidebar: oklch(0.18 0.018 25);
+    --sidebar-foreground: oklch(0.92 0.008 30);
+    --sidebar-primary: oklch(0.59 0.215 33);
+    --sidebar-primary-foreground: oklch(1 0 0);
+    --sidebar-accent: oklch(0.3 0.06 30);
+    --sidebar-accent-foreground: oklch(0.8 0.12 35);
+    --sidebar-border: oklch(0.32 0.025 28);
+    --sidebar-ring: oklch(0.59 0.215 33);
 
     --font-family: 'Montserrat', sans-serif;
     --font-serif: Source Serif 4, serif;
@@ -174,7 +171,7 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-sans: var(--font-sans);
     --font-mono: var(--font-mono);
     --font-serif: var(--font-serif);
 
@@ -191,10 +188,6 @@
     --shadow-lg: var(--shadow-lg);
     --shadow-xl: var(--shadow-xl);
     --shadow-2xl: var(--shadow-2xl);
-    --font-heading: var(--font-sans);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 @layer base {
@@ -212,7 +205,7 @@
     body {
         @apply bg-background text-foreground;
     }
-  html {
-    @apply font-sans;
+    html {
+        @apply font-sans;
     }
 }

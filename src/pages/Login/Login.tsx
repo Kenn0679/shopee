@@ -1,4 +1,5 @@
-import { Form } from 'react-router'
+import { Form, Link } from 'react-router'
+import { Button } from '~/components/ui/button'
 
 export default function Login() {
     return (
@@ -6,7 +7,7 @@ export default function Login() {
             <div className='max-w-300 mx-auto px-4'>
                 <div className='grid grid-cols-1 py-10 lg:grid-cols-5 lg:py-32 lg:pr-10'>
                     <div className='lg:col-span-2 lg:col-start-4'>
-                        <Form className='p-10 rounded bg-background'>
+                        <Form className='p-10 rounded bg-background min-w-fit'>
                             <div className='text-2xl'>Đăng Nhập</div>
                             <div className='mt-8'>
                                 <input
@@ -26,7 +27,23 @@ export default function Login() {
                                 />
                                 <div className='mt-1 text-destructive min-h-4 text-sm'></div>
                             </div>
-                            <div className='mt-3'></div>
+                            <div className='mt-3'>
+                                <Button
+                                    type='submit'
+                                    className='w-full text-center py-6 px-2 uppercase bg-primary text-white hover:bg-destructive min-w-fit'
+                                    size={'lg'}
+                                >
+                                    Đăng Nhập
+                                </Button>
+                            </div>
+                            <div className='mt-8 text-center'>
+                                <div className='flex justify-center'>
+                                    <span className='text-slate-500'>Bạn chưa có tài khoản đăng nhập?</span>
+                                    <Link to='/register' className='text-primary hover:underline ml-1'>
+                                        Đăng ký
+                                    </Link>
+                                </div>
+                            </div>
                         </Form>
                     </div>
                 </div>
