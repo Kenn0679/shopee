@@ -5,23 +5,23 @@ import Register from './pages/Register'
 import RegisterLayout from './layouts/RegisterLayout'
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        Component: ProductList
-    },
-    {
-        Component: RegisterLayout,
-        children: [
-            {
-                path: '/login',
-                Component: Login
-            },
-            {
-                path: '/register',
-                Component: Register
-            }
-        ]
-    }
+  {
+    path: '/',
+    Component: ProductList
+  },
+  {
+    Component: RegisterLayout,
+    children: [
+      {
+        path: '/login',
+        Component: Login
+      },
+      {
+        path: '/register',
+        Component: Register
+      }
+    ]
+  }
 ])
 
 export default router

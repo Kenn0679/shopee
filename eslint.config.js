@@ -8,49 +8,49 @@ import eslintPluginPrettier from 'eslint-plugin-prettier'
 import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y'
 
 export default defineConfig([
-    { ignores: ['vite.config.ts', 'dist/', 'node_modules/'] },
-    globalIgnores(['dist']),
-    {
-        settings: {
-            react: {
-                version: 'detect'
-            }
-        }
-    },
-    js.configs.recommended,
-    ...tseslint.configs.recommended,
-    reactPlugin.configs.flat.recommended,
-    reactPlugin.configs.flat['jsx-runtime'],
-    reactHooks.configs.flat.recommended,
-    eslintPluginJsxA11y.flatConfigs.recommended,
-    {
-        files: ['**/*.{ts,tsx}'],
-        plugins: {
-            prettier: eslintPluginPrettier
-        },
-        languageOptions: {
-            ecmaVersion: 2020,
-            globals: globals.browser
-        },
-        rules: {
-            '@typescript-eslint/no-explicit-any': 'off',
-            'react/react-in-jsx-scope': 'off',
-            'react/jsx-no-target-blank': 'warn',
-            '@typescript-eslint/no-unused-vars': 'warn',
-            'prettier/prettier': [
-                'warn',
-                {
-                    arrowParens: 'always',
-                    semi: false,
-                    trailingComma: 'none',
-                    tabWidth: 4,
-                    endOfLine: 'auto',
-                    useTabs: false,
-                    singleQuote: true,
-                    printWidth: 120,
-                    jsxSingleQuote: true
-                }
-            ]
-        }
+  { ignores: ['vite.config.ts', 'dist/', 'node_modules/'] },
+  globalIgnores(['dist']),
+  {
+    settings: {
+      react: {
+        version: 'detect'
+      }
     }
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat['jsx-runtime'],
+  reactHooks.configs.flat.recommended,
+  eslintPluginJsxA11y.flatConfigs.recommended,
+  {
+    files: ['**/*.{ts,tsx}'],
+    plugins: {
+      prettier: eslintPluginPrettier
+    },
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-no-target-blank': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      'prettier/prettier': [
+        'warn',
+        {
+          arrowParens: 'always',
+          semi: false,
+          trailingComma: 'none',
+          tabWidth: 2,
+          endOfLine: 'auto',
+          useTabs: false,
+          singleQuote: true,
+          printWidth: 120,
+          jsxSingleQuote: true
+        }
+      ]
+    }
+  }
 ])
