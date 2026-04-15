@@ -1,36 +1,37 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Form, Link } from 'react-router'
+import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
+import { loginSchema, type LoginFormData } from '~/utils/rules'
 
 export default function Login() {
-  const { register, handleSubmit, formState } = useForm()
+  const { register, handleSubmit, formState } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) })
 
   const onSubmit = handleSubmit((data) => {})
   return (
     <div className='bg-primary/75'>
-      <div className='max-w-300 mx-auto px-4'>
+      <div className='container'>
         <div className='grid grid-cols-1 py-10 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
             <Form className='p-10 rounded bg-background min-w-fit' onSubmit={onSubmit}>
               <div className='text-2xl'>Đăng Nhập</div>
-              <div className='mt-8'>
-                <input
-                  type='email'
-                  name='email'
-                  className='p-3 w-full outline-none border border-muted-foreground/50 focus:border-muted-foreground focus:shadow-sm rounded-sm'
-                  placeholder='Email'
-                />
-                <div className='mt-1 text-destructive min-h-4 text-sm'></div>
-              </div>
-              <div className='mt-3'>
-                <input
-                  type='password'
-                  name='password'
-                  className='p-3 w-full outline-none border border-muted-foreground/50 focus:border-muted-foreground focus:shadow-sm rounded-sm'
-                  placeholder='Mật khẩu'
-                />
-                <div className='mt-1 text-destructive min-h-4 text-sm'></div>
-              </div>
+              <Input
+                className='mt-8'
+                name='email'
+                register={register}
+                type='text'
+                placeholder='Email'
+                errorMessage={formState.errors.email?.message}
+              />
+              <Input
+                className='mt-3'
+                name='password'
+                register={register}
+                type='password'
+                placeholder='Mật khẩu'
+                errorMessage={formState.errors.password?.message}
+              />
               <div className='mt-3'>
                 <Button
                   type='submit'

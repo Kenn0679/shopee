@@ -1,52 +1,41 @@
-import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
+import * as z from 'zod'
 
-type RulesType = { [key in 'email' | 'password' | 'confirmPassword']: RegisterOptions }
-const getRules = (getValues?: UseFormGetValues<any>): RulesType => ({
-  email: {
-    required: {
-      value: true,
-      message: 'Email là bắt buộc'
-    },
-    pattern: {
-      value:
-        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
-      message: 'Email không hợp lệ'
-    },
-    minLength: {
-      value: 5,
-      message: 'Email phải có ít nhất 5 ký tự'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Email không được vượt quá 160 ký tự'
-    }
-  },
-  password: {
-    required: {
-      value: true,
-      message: 'Mật khẩu là bắt buộc'
-    },
-    minLength: {
-      value: 6,
-      message: 'Mật khẩu phải có ít nhất 6 ký tự'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Mật khẩu không được vượt quá 160 ký tự'
-    }
-  },
-  confirmPassword: {
-    required: {
-      value: true,
-      message: 'Bạn phải xác nhận mật khẩu'
-    },
-    validate: (value) => {
-      if (typeof getValues === 'function') {
-        const password = getValues('password')
-        return value === password || 'Mật khẩu xác nhận không khớp'
-      } else return
-    }
-  }
+export const baseSchema = z.object({
+  email: z
+    .email({
+      error: (issue) => {
+        if (issue.input === undefined || issue.input === '') return { message: 'Email là bắt buộc' }
+        return { message: 'Email không hợp lệ' }
+      }
+    })
+    .min(5, { error: 'Email phải có ít nhất 5 ký tự' })
+    .max(160, { error: 'Email không được vượt quá 160 ký tự' }),
+  password: z
+    .string({
+      error: (issue) => {
+        if (issue.input === undefined || issue.input === '') return { message: 'Mật khẩu là bắt buộc' }
+        return { message: 'Mật khẩu phải là một chuỗi' }
+      }
+    })
+    .min(6, { error: 'Mật khẩu phải có ít nhất 6 ký tự' })
+    .max(160, { error: 'Mật khẩu không được vượt quá 160 ký tự' }),
+  confirmPassword: z
+    .string({
+      error: (issue) => {
+        if (issue.input === undefined || issue.input === '') return { message: 'Bạn phải xác nhận mật khẩu' }
+        return { message: 'Mật khẩu xác nhận phải là một chuỗi' }
+      }
+    })
+    .min(1, { error: 'Bạn phải xác nhận mật khẩu' })
+    .max(160, { error: 'Mật khẩu xác nhận không được vượt quá 160 ký tự' })
 })
 
-export default getRules
+export type registerFormData = z.infer<typeof baseSchema>
+export const registerSchema = baseSchema.refine((data) => data.password === data.confirmPassword, {
+  error: 'Mật khẩu xác nhận không khớp',
+  path: ['confirmPassword'],
+  abort: true
+})
+
+export const loginSchema = baseSchema.omit({ confirmPassword: true })
+export type LoginFormData = z.infer<typeof loginSchema>
