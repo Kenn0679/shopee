@@ -1,6 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { useForm, type RegisterOptions } from 'react-hook-form'
-import { Form, Link } from 'react-router'
+import { omit } from 'lodash'
+import { Form, Link, useNavigate } from 'react-router'
+import { registerAccount } from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
 import { registerSchema, type registerFormData } from '~/utils/rules'
@@ -9,11 +12,20 @@ export default function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    getValues
+    formState: { errors }
   } = useForm<registerFormData>({ resolver: zodResolver(registerSchema) })
+  const nav = useNavigate()
 
-  const onSubmit = handleSubmit((data) => {})
+  const registerMutaition = useMutation({
+    mutationFn: (body: Omit<registerFormData, 'confirmPassword'>) => registerAccount(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    const body = omit(data, ['confirmPassword'])
+    registerMutaition.mutate(body, {
+      onSuccess: () => nav('/')
+    })
+  })
 
   return (
     <div className='bg-primary/75'>
