@@ -7,6 +7,7 @@ import { registerAccount } from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
 import { registerSchema, type registerFormData } from '~/utils/rules'
+import { toast } from 'react-toastify'
 
 export default function Register() {
   const {
@@ -23,7 +24,14 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirmPassword'])
     registerMutaition.mutate(body, {
-      onSuccess: () => nav('/')
+      onSuccess: () => {
+        toast.success('Đăng ký thành công')
+        nav('/')
+      },
+      onError: (error) => {
+        console.log(error)
+        toast.error('Đăng ký thất bại')
+      }
     })
   })
 
