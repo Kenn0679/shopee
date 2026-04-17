@@ -1,4 +1,5 @@
-import axios, { type AxiosInstance } from 'axios'
+import axios, { AxiosError, type AxiosInstance } from 'axios'
+import { refreshToken } from '~/apis/auth.api'
 
 class Http {
   instance: AxiosInstance
@@ -14,5 +15,13 @@ class Http {
 }
 
 const http = new Http().instance
+
+http.interceptors.response.use(undefined, async (error) => {
+  if (error.response?.status === 401) {
+    await refreshToken(localStorage.getItem('refreshToken') || '')
+    return http(error.config)
+  }
+  throw error
+})
 
 export default http

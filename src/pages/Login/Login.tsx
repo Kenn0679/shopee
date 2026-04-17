@@ -6,11 +6,13 @@ import { toast } from 'react-toastify'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
 import type { AuthResponse } from '~/types/auth.types'
+import type { ResponseApi } from '~/types/utils.types'
 import http from '~/utils/http'
 import { loginSchema, type LoginFormData } from '~/utils/rules'
+import { isAxiosUnprocessableEntityError } from '~/utils/utils'
 
 export default function Login() {
-  const { register, handleSubmit, formState } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) })
+  const { register, handleSubmit, formState, setError } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) })
   const loginMutation = useMutation({
     mutationFn: (body: LoginFormData) => http.post<AuthResponse>('/login', body)
   })
@@ -23,7 +25,21 @@ export default function Login() {
         nav('/')
       },
       onError: (error) => {
-        console.log(error)
+        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<LoginFormData, 'password'>>>(error)) {
+          const formError = error.response?.data.data
+          console.log(formError)
+
+          if (formError) {
+            for (const key in formError) {
+              const error = key as keyof Omit<LoginFormData, 'password'>
+
+              setError(error, {
+                message: formError[error],
+                type: 'Server'
+              })
+            }
+          }
+        }
         toast.error('Đăng nhập thất bại')
       }
     })

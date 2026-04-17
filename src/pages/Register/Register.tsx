@@ -1,24 +1,27 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { useForm, type RegisterOptions } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { omit } from 'lodash'
 import { Form, Link, useNavigate } from 'react-router'
 import { registerAccount } from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
-import { registerSchema, type registerFormData } from '~/utils/rules'
+import { registerSchema, type RegisterFormData } from '~/utils/rules'
 import { toast } from 'react-toastify'
+import { isAxiosUnprocessableEntityError } from '~/utils/utils'
+import type { ResponseApi } from '~/types/utils.types'
 
 export default function Register() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
-  } = useForm<registerFormData>({ resolver: zodResolver(registerSchema) })
+  } = useForm<RegisterFormData>({ resolver: zodResolver(registerSchema) })
   const nav = useNavigate()
 
   const registerMutaition = useMutation({
-    mutationFn: (body: Omit<registerFormData, 'confirmPassword'>) => registerAccount(body)
+    mutationFn: (body: Omit<RegisterFormData, 'confirmPassword'>) => registerAccount(body)
   })
 
   const onSubmit = handleSubmit((data) => {
@@ -29,7 +32,20 @@ export default function Register() {
         nav('/')
       },
       onError: (error) => {
-        console.log(error)
+        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<RegisterFormData, 'confirmPassword'>>>(error)) {
+          const formError = error.response?.data.data
+
+          if (formError) {
+            for (const key in formError) {
+              const error = key as keyof Omit<RegisterFormData, 'confirmPassword'> //ép kiểu để khỏi bị lỗi key is string
+
+              setError(error, {
+                message: formError[error],
+                type: 'Server'
+              })
+            }
+          }
+        }
         toast.error('Đăng ký thất bại')
       }
     })

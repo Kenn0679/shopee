@@ -30,7 +30,7 @@ export const baseSchema = z.object({
     .max(160, { error: 'Mật khẩu xác nhận không được vượt quá 160 ký tự' })
 })
 
-export type registerFormData = z.infer<typeof baseSchema>
+export type RegisterFormData = z.infer<typeof baseSchema>
 export const registerSchema = baseSchema.refine((data) => data.password === data.confirmPassword, {
   error: 'Mật khẩu xác nhận không khớp',
   path: ['confirmPassword'],
