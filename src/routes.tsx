@@ -3,11 +3,17 @@ import ProductList from './pages/ProductList'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layouts/RegisterLayout'
+import MainLayout from './layouts/MainLayout'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    Component: ProductList
+    Component: MainLayout,
+    children: [
+      {
+        path: '/',
+        Component: ProductList
+      }
+    ]
   },
   {
     Component: RegisterLayout,
