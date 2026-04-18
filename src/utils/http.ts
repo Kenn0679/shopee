@@ -1,4 +1,5 @@
-import axios, { AxiosError, type AxiosInstance } from 'axios'
+import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
+import { toast } from 'react-toastify'
 import { refreshToken } from '~/apis/auth.api'
 
 class Http {
@@ -16,10 +17,16 @@ class Http {
 
 const http = new Http().instance
 
-http.interceptors.response.use(undefined, async (error) => {
+http.interceptors.response.use(undefined, async (error: AxiosError) => {
+  if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
+    const data: any | undefined = error.response?.data
+    const message = data.message ?? error.message
+    toast.error(message)
+  }
+
   if (error.response?.status === 401) {
     await refreshToken(localStorage.getItem('refreshToken') || '')
-    return http(error.config)
+    return http(error.config!)
   }
   throw error
 })
