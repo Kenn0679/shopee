@@ -1,17 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Form, Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
+import { AuthContext } from '~/contexts/auth.context'
 import type { AuthResponse } from '~/types/auth.types'
-import type { ResponseApi } from '~/types/utils.types'
+import type { ErrorResponse } from '~/types/utils.types'
 import http from '~/utils/http'
 import { loginSchema, type LoginFormData } from '~/utils/rules'
 import { isAxiosUnprocessableEntityError } from '~/utils/utils'
 
 export default function Login() {
+  const { setIsAuthenticated } = useContext(AuthContext)
   const { register, handleSubmit, formState, setError } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) })
   const loginMutation = useMutation({
     mutationFn: (body: LoginFormData) => http.post<AuthResponse>('/login', body)
@@ -22,10 +25,11 @@ export default function Login() {
     loginMutation.mutate(data, {
       onSuccess: () => {
         toast.success('Đăng nhập thành công')
+        setIsAuthenticated(true)
         nav('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<LoginFormData, 'password'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<LoginFormData, 'password'>>>(error)) {
           const formError = error.response?.data.data
           console.log(formError)
 

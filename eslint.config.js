@@ -50,13 +50,6 @@ export default defineConfig([
           printWidth: 120,
           jsxSingleQuote: true
         }
-      ],
-      '@typescript-eslint/consistent-type-imports': [
-        'warn',
-        {
-          prefer: 'no-type-imports',
-          fixStyle: 'inline-type-imports'
-        }
       ]
     }
   }

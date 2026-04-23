@@ -1,13 +1,41 @@
 import { Link } from 'react-router'
 import shoppingCartIcon from '~/assets/shopping-cart-outline-svgrepo-com.svg'
 import { ReactSVG } from 'react-svg'
+import Popover from '../Popover'
+import { useMutation } from '@tanstack/react-query'
+import { logoutAccount } from '~/apis/auth.api'
+import { toast } from 'react-toastify'
+import { useContext } from 'react'
+import { AuthContext } from '~/contexts/auth.context'
 
 export default function Header() {
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext)
+  const logoutMutation = useMutation({
+    mutationFn: logoutAccount,
+    onSuccess: () => {
+      toast.success('Đăng xuất thành công')
+      setIsAuthenticated(false)
+    }
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
   return (
     <div className='pb-5 pt-0.5 bg-brand-gradient text-white'>
       <div className='container'>
         <div className='flex justify-end text-[0.875rem]'>
-          <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer  p-[0.4375rem_0.625rem]'>
+          <Popover
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+            renderPopover={
+              <div className='bg-background relative shadow-md rounded-sm border border-gray-200'>
+                <div className='flex flex-col py-1 pr-18 pl-1'>
+                  <button className='py-2 px-3 hover:text-primary'> Tiếng Việt </button>
+                  <button className='py-2 px-3 hover:text-primary'> English </button>
+                </div>
+              </div>
+            }
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -33,17 +61,49 @@ export default function Header() {
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
-          </div>
-          <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
-            <div className='w-6 h-6 mr-2 shrink-0 overflow-hidden relative'>
-              <img
-                src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
-                alt='avatar'
-                className='w-full h-full object-cover rounded-full'
-              />
+          </Popover>
+          {isAuthenticated ? (
+            <Popover
+              className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+              renderPopover={
+                <div className='bg-background relative shadow-md rounded-sm border border-gray-200'>
+                  <Link to='/profile' className='block bg-background py-2 px-3  hover:text-primary'>
+                    Tài khoản của tôi
+                  </Link>
+                  <Link to='/cart' className='block bg-background py-2 px-3  hover:text-primary'>
+                    Giỏ hàng
+                  </Link>
+                  <button
+                    className='block bg-background py-2 px-3  hover:text-primary w-full text-left'
+                    onClick={handleLogout}
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              }
+            >
+              <div className='w-6 h-6 mr-2 shrink-0 overflow-hidden relative'>
+                <img
+                  src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                  alt='avatar'
+                  className='w-full h-full object-cover rounded-full'
+                />
+              </div>
+              <div>duthanhduoc</div>
+            </Popover>
+          ) : (
+            <div className='flex items-center'>
+              <Link to={'/register'} className='mx-3 capitalize hover:text-primary-foreground opacity-70'>
+                Đăng kí
+              </Link>
+              <div className='border-r border-r-primary-foreground/40 h-4' />
+              <Link to={'/login'} className='mx-3 capitalize hover:text-primary-foreground opacity-70'>
+                Đăng nhập
+              </Link>
             </div>
-            <div>duthanhduoc</div>
-          </div>
+          )}
+
+          <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'></div>
         </div>
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2 justify-self-start  outline-none border-none'>
@@ -79,7 +139,127 @@ export default function Header() {
               </button>
             </div>
           </form>
-          <div className='col-span-1 flex w-full items-center justify-center'>
+          <Popover
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+            renderPopover={
+              <div className='bg-background relative shadow-md rounded-sm border border-gray-200 max-w-100'>
+                <div className='p-2'>
+                  {/* Title */}
+                  <div className='text-muted-foreground/50 capitalize'>Sản phẩm mới thêm</div>
+                  {/* Product List In Cart */}
+                  <div className='mt-6'>
+                    {/* Product Item */}
+                    <div className='mt-4 flex'>
+                      {/* Product Image */}
+                      <div className='shrink-0'>
+                        <img
+                          src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                          alt='product'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      {/* Product Details */}
+                      <div className='grow ml-2 overflow-hidden '>
+                        <div className='truncate'>
+                          Áo thun nam nữ unisex form rộng tay lỡ vải dày dặn co giãn 4 chiều Lorem ipsum dolor sit amet
+                          consectetur adipisicing elit. Quibusdam vel natus veniam. Distinctio ad ipsa voluptates
+                          explicabo ea? Tempora ea odit voluptatem laudantium explicabo. Velit, assumenda vero? Odit,
+                          quisquam fugiat! Corrupti voluptatem expedita aliquid, temporibus nisi nobis voluptatum error
+                          id libero facere cupiditate possimus. Quos iste sit, sint repellat, aspernatur ad fuga in
+                          tempora nulla saepe commodi nemo aut architecto? Ab voluptatibus optio, placeat sapiente
+                        </div>
+                      </div>
+                      {/* Product Price */}
+                      <div className='ml-2 shrink-0'>
+                        <span className='text-primary'>50.000₫</span>
+                      </div>
+                    </div>
+                    <div className='mt-4 flex'>
+                      {/* Product Image */}
+                      <div className='shrink-0'>
+                        <img
+                          src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                          alt='product'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      {/* Product Details */}
+                      <div className='grow ml-2 overflow-hidden '>
+                        <div className='truncate'>
+                          Áo thun nam nữ unisex form rộng tay lỡ vải dày dặn co giãn 4 chiều Lorem ipsum dolor sit amet
+                          consectetur adipisicing elit. Quibusdam vel natus veniam. Distinctio ad ipsa voluptates
+                          explicabo ea? Tempora ea odit voluptatem laudantium explicabo. Velit, assumenda vero? Odit,
+                          quisquam fugiat! Corrupti voluptatem expedita aliquid, temporibus nisi nobis voluptatum error
+                          id libero facere cupiditate possimus. Quos iste sit, sint repellat, aspernatur ad fuga in
+                          tempora nulla saepe commodi nemo aut architecto? Ab voluptatibus optio, placeat sapiente
+                        </div>
+                      </div>
+                      {/* Product Price */}
+                      <div className='ml-2 shrink-0'>
+                        <span className='text-primary'>50.000₫</span>
+                      </div>
+                    </div>
+                    <div className='mt-4 flex'>
+                      {/* Product Image */}
+                      <div className='shrink-0'>
+                        <img
+                          src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                          alt='product'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      {/* Product Details */}
+                      <div className='grow ml-2 overflow-hidden '>
+                        <div className='truncate'>
+                          Áo thun nam nữ unisex form rộng tay lỡ vải dày dặn co giãn 4 chiều Lorem ipsum dolor sit amet
+                          consectetur adipisicing elit. Quibusdam vel natus veniam. Distinctio ad ipsa voluptates
+                          explicabo ea? Tempora ea odit voluptatem laudantium explicabo. Velit, assumenda vero? Odit,
+                          quisquam fugiat! Corrupti voluptatem expedita aliquid, temporibus nisi nobis voluptatum error
+                          id libero facere cupiditate possimus. Quos iste sit, sint repellat, aspernatur ad fuga in
+                          tempora nulla saepe commodi nemo aut architecto? Ab voluptatibus optio, placeat sapiente
+                        </div>
+                      </div>
+                      {/* Product Price */}
+                      <div className='ml-2 shrink-0'>
+                        <span className='text-primary'>50.000₫</span>
+                      </div>
+                    </div>
+                    <div className='mt-4 flex'>
+                      {/* Product Image */}
+                      <div className='shrink-0'>
+                        <img
+                          src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                          alt='product'
+                          className='w-11 h-11 object-cover'
+                        />
+                      </div>
+                      {/* Product Details */}
+                      <div className='grow ml-2 overflow-hidden '>
+                        <div className='truncate'>
+                          Áo thun nam nữ unisex form rộng tay lỡ vải dày dặn co giãn 4 chiều Lorem ipsum dolor sit amet
+                          consectetur adipisicing elit. Quibusdam vel natus veniam. Distinctio ad ipsa voluptates
+                          explicabo ea? Tempora ea odit voluptatem laudantium explicabo. Velit, assumenda vero? Odit,
+                          quisquam fugiat! Corrupti voluptatem expedita aliquid, temporibus nisi nobis voluptatum error
+                          id libero facere cupiditate possimus. Quos iste sit, sint repellat, aspernatur ad fuga in
+                          tempora nulla saepe commodi nemo aut architecto? Ab voluptatibus optio, placeat sapiente
+                        </div>
+                      </div>
+                      {/* Product Price */}
+                      <div className='ml-2 shrink-0'>
+                        <span className='text-primary'>50.000₫</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex items-center mt-6 justify-between'>
+                    <div className='capitalize text-sm text-muted-foreground/70'>Thêm hàng vào giỏ</div>
+                    <button className='capitalize bg-primary hover:bg-primary/80 px-4 py-2 rounded-sm text-primary-foreground'>
+                      Xem giỏ hàng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          >
             <Link to='/' className='flex h-full w-full items-center justify-center'>
               <ReactSVG
                 src={shoppingCartIcon}
@@ -95,7 +275,7 @@ export default function Header() {
                 }}
               />
             </Link>
-          </div>
+          </Popover>
         </div>
       </div>
     </div>

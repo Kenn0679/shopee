@@ -1,7 +1,7 @@
 const endpoints = {
   auth: {
     login: '/login',
-    register: '/registerr',
+    register: '/register',
     logout: '/logout',
     refreshToklen: '/refresh-access-token'
   },

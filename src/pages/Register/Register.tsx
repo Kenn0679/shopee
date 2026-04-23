@@ -9,9 +9,12 @@ import { Button } from '~/components/ui/button'
 import { registerSchema, type RegisterFormData } from '~/utils/rules'
 import { toast } from 'react-toastify'
 import { isAxiosUnprocessableEntityError } from '~/utils/utils'
-import type { ResponseApi } from '~/types/utils.types'
+import type { ErrorResponse } from '~/types/utils.types'
+import { useContext } from 'react'
+import { AuthContext } from '~/contexts/auth.context'
 
 export default function Register() {
+  const { setIsAuthenticated } = useContext(AuthContext)
   const {
     register,
     handleSubmit,
@@ -29,10 +32,11 @@ export default function Register() {
     registerMutaition.mutate(body, {
       onSuccess: () => {
         toast.success('Đăng ký thành công')
+        setIsAuthenticated(true)
         nav('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<RegisterFormData, 'confirmPassword'>>>(error)) {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<RegisterFormData, 'confirmPassword'>>>(error)) {
           const formError = error.response?.data.data
 
           if (formError) {
