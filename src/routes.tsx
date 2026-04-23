@@ -7,6 +7,7 @@ import MainLayout from './layouts/MainLayout'
 import { AuthContext } from './contexts/auth.context'
 import { useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
+import endpoints from './constants/endpoints'
 
 // Định nghĩa một component để bảo vệ các route cần xác thực
 const ProtectedRoute = () => {
@@ -19,7 +20,7 @@ const ProtectedRoute = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
+  return isAuthenticated ? <Outlet /> : <Navigate to={endpoints.auth.login} />
 }
 
 // Định nghĩa một component để ngăn chặn người dùng đã đăng nhập truy cập vào trang đăng nhập và đăng ký (obviously cuz they already logged in)
@@ -33,7 +34,7 @@ const RejectedRoute = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
+  return !isAuthenticated ? <Outlet /> : <Navigate to={endpoints.home} />
 }
 
 const router = createBrowserRouter([
@@ -54,11 +55,11 @@ const router = createBrowserRouter([
         Component: RegisterLayout,
         children: [
           {
-            path: 'login',
+            path: endpoints.auth.login,
             Component: Login
           },
           {
-            path: 'register',
+            path: endpoints.auth.register,
             Component: Register
           }
         ]
@@ -73,7 +74,7 @@ const router = createBrowserRouter([
         Component: MainLayout,
         children: [
           {
-            path: 'profile',
+            path: endpoints.user.me,
             Component: ProductList
           }
         ]

@@ -4,29 +4,31 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Form, Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { loginAccount } from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
+import { Spinner } from '~/components/ui/spinner'
+import endpoints from '~/constants/endpoints'
 import { AuthContext } from '~/contexts/auth.context'
-import type { AuthResponse } from '~/types/auth.types'
 import type { ErrorResponse } from '~/types/utils.types'
-import http from '~/utils/http'
 import { loginSchema, type LoginFormData } from '~/utils/rules'
 import { isAxiosUnprocessableEntityError } from '~/utils/utils'
 
 export default function Login() {
-  const { setIsAuthenticated } = useContext(AuthContext)
+  const { setIsAuthenticated, setProfile, profile } = useContext(AuthContext)
   const { register, handleSubmit, formState, setError } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) })
   const loginMutation = useMutation({
-    mutationFn: (body: LoginFormData) => http.post<AuthResponse>('/login', body)
+    mutationFn: (body: LoginFormData) => loginAccount(body)
   })
   const nav = useNavigate()
 
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success('Đăng nhập thành công')
         setIsAuthenticated(true)
-        nav('/')
+        setProfile(data.data.data.user)
+        nav(-1)
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<LoginFormData, 'password'>>>(error)) {
@@ -48,6 +50,7 @@ export default function Login() {
       }
     })
   })
+
   return (
     <div className='bg-primary/75'>
       <div className='container'>
@@ -76,14 +79,16 @@ export default function Login() {
                   type='submit'
                   className='w-full text-center py-6 px-2 uppercase bg-primary text-white hover:bg-destructive min-w-fit'
                   size={'lg'}
+                  disabled={loginMutation.isPending}
                 >
                   Đăng Nhập
+                  {loginMutation.isPending && <Spinner />}
                 </Button>
               </div>
               <div className='mt-8 text-center'>
                 <div className='flex justify-center'>
                   <span className='text-slate-500'>Bạn chưa có tài khoản đăng nhập?</span>
-                  <Link to='/register' className='text-primary hover:underline ml-1'>
+                  <Link to={endpoints.auth.register} className='text-primary hover:underline ml-1'>
                     Đăng ký
                   </Link>
                 </div>

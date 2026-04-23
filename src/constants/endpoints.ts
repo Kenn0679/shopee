@@ -1,4 +1,5 @@
 const endpoints = {
+  home: '/',
   auth: {
     login: '/login',
     register: '/register',

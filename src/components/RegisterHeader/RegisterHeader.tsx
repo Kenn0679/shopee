@@ -1,7 +1,8 @@
 import { Link, useMatch } from 'react-router'
+import endpoints from '~/constants/endpoints'
 
 export default function RegisterHeader() {
-  const isRegister = Boolean(useMatch('/register'))
+  const isRegister = Boolean(useMatch(endpoints.auth.register))
   return (
     <header className='py-5'>
       <div className='max-w-7xl mx-auto p-0'>

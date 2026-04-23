@@ -12,9 +12,11 @@ import { isAxiosUnprocessableEntityError } from '~/utils/utils'
 import type { ErrorResponse } from '~/types/utils.types'
 import { useContext } from 'react'
 import { AuthContext } from '~/contexts/auth.context'
+import { Spinner } from '~/components/ui/spinner'
+import endpoints from '~/constants/endpoints'
 
 export default function Register() {
-  const { setIsAuthenticated } = useContext(AuthContext)
+  const { setIsAuthenticated, setProfile } = useContext(AuthContext)
   const {
     register,
     handleSubmit,
@@ -30,10 +32,11 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirmPassword'])
     registerMutaition.mutate(body, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success('Đăng ký thành công')
         setIsAuthenticated(true)
-        nav('/')
+        setProfile(data.data.data.user)
+        nav(-1)
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<RegisterFormData, 'confirmPassword'>>>(error)) {
@@ -92,15 +95,17 @@ export default function Register() {
                   type='submit'
                   className='w-full text-center py-6 px-2 uppercase bg-primary text-white hover:bg-destructive min-w-fit'
                   size={'lg'}
+                  disabled={registerMutaition.isPending}
                 >
                   Đăng Ký
+                  {registerMutaition.isPending && <Spinner />}
                 </Button>
               </div>
               {/* Login link */}
               <div className='mt-8 text-center'>
                 <div className='flex justify-center'>
                   <span className='text-slate-500'>Bạn đã có tài khoản đăng nhập?</span>
-                  <Link to='/login' className='text-primary hover:underline ml-1'>
+                  <Link to={endpoints.auth.login} className='text-primary hover:underline ml-1'>
                     Đăng nhập
                   </Link>
                 </div>
