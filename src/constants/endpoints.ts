@@ -4,7 +4,7 @@ const endpoints = {
     login: '/login',
     register: '/register',
     logout: '/logout',
-    refreshToklen: '/refresh-access-token'
+    refreshToken: '/refresh-access-token'
   },
   user: {
     me: '/me',

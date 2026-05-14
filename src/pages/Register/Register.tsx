@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { omit } from 'lodash'
 import { Form, Link, useNavigate } from 'react-router'
-import { registerAccount } from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
 import { registerSchema, type RegisterFormData } from '~/utils/rules'
@@ -14,6 +13,7 @@ import { useContext } from 'react'
 import { AuthContext } from '~/contexts/auth.context'
 import { Spinner } from '~/components/ui/spinner'
 import endpoints from '~/constants/endpoints'
+import AuthApi from '~/apis/auth.api'
 
 export default function Register() {
   const { setIsAuthenticated, setProfile } = useContext(AuthContext)
@@ -26,7 +26,7 @@ export default function Register() {
   const nav = useNavigate()
 
   const registerMutaition = useMutation({
-    mutationFn: (body: Omit<RegisterFormData, 'confirmPassword'>) => registerAccount(body)
+    mutationFn: (body: Omit<RegisterFormData, 'confirmPassword'>) => AuthApi.registerAccount(body)
   })
 
   const onSubmit = handleSubmit((data) => {

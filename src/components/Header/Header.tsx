@@ -3,16 +3,16 @@ import shoppingCartIcon from '~/assets/shopping-cart-outline-svgrepo-com.svg'
 import { ReactSVG } from 'react-svg'
 import Popover from '../Popover'
 import { useMutation } from '@tanstack/react-query'
-import { logoutAccount } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
 import { useContext } from 'react'
 import { AuthContext } from '~/contexts/auth.context'
 import endpoints from '~/constants/endpoints'
+import AuthApi from '~/apis/auth.api'
 
 export default function Header() {
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } = useContext(AuthContext)
   const logoutMutation = useMutation({
-    mutationFn: logoutAccount,
+    mutationFn: AuthApi.logoutAccount,
     onSuccess: () => {
       toast.success('Đăng xuất thành công')
       setIsAuthenticated(false)

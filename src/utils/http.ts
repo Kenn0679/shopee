@@ -1,9 +1,9 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
-import { refreshToken } from '~/apis/auth.api'
 import type { AuthResponse } from '~/types/auth.types'
 import { getAccessToken, removeAuth, saveAccessToken, saveProfile } from './auth'
 import endpoints from '~/constants/endpoints'
+import AuthApi from '~/apis/auth.api'
 
 class Http {
   instance: AxiosInstance
@@ -54,7 +54,7 @@ class Http {
         }
 
         if (error.response?.status === 401) {
-          await refreshToken(localStorage.getItem('refreshToken') || '')
+          await AuthApi.refreshToken(localStorage.getItem('refreshToken') || '')
           return http(error.config!)
         }
         return Promise.reject(error)

@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Form, Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
-import { loginAccount } from '~/apis/auth.api'
+import AuthApi from '~/apis/auth.api'
 import Input from '~/components/Input'
 import { Button } from '~/components/ui/button'
 import { Spinner } from '~/components/ui/spinner'
@@ -18,7 +18,7 @@ export default function Login() {
   const { setIsAuthenticated, setProfile, profile } = useContext(AuthContext)
   const { register, handleSubmit, formState, setError } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) })
   const loginMutation = useMutation({
-    mutationFn: (body: LoginFormData) => loginAccount(body)
+    mutationFn: (body: LoginFormData) => AuthApi.loginAccount(body)
   })
   const nav = useNavigate()
 
