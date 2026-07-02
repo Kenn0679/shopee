@@ -39,7 +39,6 @@ export default function Popover({
   const data = useFloating({
     open,
     onOpenChange: setOpen,
-    // eslint-disable-next-line react-hooks/refs
     middleware: [offset(10), flip(), shift(), arrow({ element: arrowRef })],
     whileElementsMounted: autoUpdate,
     transform: false,
@@ -54,14 +53,12 @@ export default function Popover({
   const id = useId()
 
   return (
-    // eslint-disable-next-line react-hooks/refs
     <Element className={className} ref={refs.setReference} {...getReferenceProps()}>
       {children}
       <FloatingPortal id={id}>
         <AnimatePresence>
           {open && (
             <motion.div
-              // eslint-disable-next-line react-hooks/refs
               ref={refs.setFloating}
               style={{
                 transformOrigin: `${data.middlewareData.arrow?.x}px top`,
@@ -75,7 +72,7 @@ export default function Popover({
             >
               <span
                 ref={arrowRef}
-                className='absolute z-10 translate-y-[-95%] border-11 border-x-transparent border-t-transparent border-b-white'
+                className='absolute z-10 translate-y-[-95%] border-[11px] border-x-transparent border-t-transparent border-b-white'
                 style={{
                   left: data.middlewareData.arrow?.x,
                   top: data.middlewareData.arrow?.y

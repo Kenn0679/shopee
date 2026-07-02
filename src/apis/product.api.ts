@@ -1,13 +1,17 @@
-import endpoints from '~/constants/endpoints'
-import type { ProductList, ProductListConfig, Product } from '~/types/product.type'
-import type { SuccessResponse } from '~/types/utils.types'
-import http from '~/utils/http'
+import { Product, ProductList, ProductListConfig } from 'src/types/product.type'
+import { SuccessResponse } from 'src/types/utils.type'
+import http from 'src/utils/http'
 
-export const productApi = {
+const URL = 'products'
+const productApi = {
   getProducts(params: ProductListConfig) {
-    return http.get<SuccessResponse<ProductList>>(endpoints.product.products, { params })
+    return http.get<SuccessResponse<ProductList>>(URL, {
+      params
+    })
   },
-  getProductdetail(id: string) {
-    return http.get<SuccessResponse<Product>>(endpoints.product.product(id))
+  getProductDetail(id: string) {
+    return http.get<SuccessResponse<Product>>(`${URL}/${id}`)
   }
 }
+
+export default productApi

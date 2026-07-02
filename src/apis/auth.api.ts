@@ -1,20 +1,21 @@
-import endpoints from '~/constants/endpoints'
-import type { AuthResponse } from '~/types/auth.types'
-import http from '~/utils/http'
+import { AuthResponse } from 'src/types/auth.type'
+import http from 'src/utils/http'
 
-const AuthApi = {
-  registerAccount: (body: { email: string; password: string }) => {
-    return http.post<AuthResponse>(endpoints.auth.register, body)
+export const URL_LOGIN = 'login'
+export const URL_REGISTER = 'register'
+export const URL_LOGOUT = 'logout'
+export const URL_REFRESH_TOKEN = 'refresh-access-token'
+
+const authApi = {
+  registerAccount(body: { email: string; password: string }) {
+    return http.post<AuthResponse>(URL_REGISTER, body)
   },
-  loginAccount: (body: { email: string; password: string }) => {
-    return http.post<AuthResponse>(endpoints.auth.login, body)
+  login(body: { email: string; password: string }) {
+    return http.post<AuthResponse>(URL_LOGIN, body)
   },
-  logoutAccount: () => {
-    return http.post(endpoints.auth.logout)
-  },
-  refreshToken: (refreshToken: string) => {
-    return http.post(endpoints.auth.refreshToken, { refreshToken })
+  logout() {
+    return http.post(URL_LOGOUT)
   }
 }
 
-export default AuthApi
+export default authApi

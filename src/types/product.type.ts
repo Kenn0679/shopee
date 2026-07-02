@@ -1,4 +1,4 @@
-export type Product = {
+export interface Product {
   _id: string
   images: string[]
   price: number
@@ -18,7 +18,7 @@ export type Product = {
   updatedAt: string
 }
 
-export type ProductList = {
+export interface ProductList {
   products: Product[]
   pagination: {
     page: number
@@ -28,13 +28,14 @@ export type ProductList = {
 }
 
 export interface ProductListConfig {
-  page?: number
-  limit?: number
+  page?: number | string
+  limit?: number | string
   sort_by?: 'createdAt' | 'view' | 'sold' | 'price'
   order?: 'asc' | 'desc'
   exclude?: string
-  rating_filter?: number
-  price_max?: number
-  price_min?: number
+  rating_filter?: number | string
+  price_max?: number | string
+  price_min?: number | string
   name?: string
+  category?: string
 }

@@ -1,79 +1,180 @@
-import React from 'react'
-import { Button } from '~/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from '~/components/ui/select'
+import classNames from 'classnames'
+import { sortBy, order as orderConstant } from 'src/constants/product'
+import { ProductListConfig } from 'src/types/product.type'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
+import { QueryConfig } from 'src/hooks/useQueryConfig'
+import path from 'src/constants/path'
+import omit from 'lodash/omit'
+interface Props {
+  queryConfig: QueryConfig
+  pageSize: number
+}
 
-export default function SortProductList() {
+export default function SortProductList({ queryConfig, pageSize }: Props) {
+  const page = Number(queryConfig.page)
+  const { sort_by = sortBy.createdAt, order } = queryConfig
+  const navigate = useNavigate()
+
+  const isActiveSortBy = (sortByValue: Exclude<ProductListConfig['sort_by'], undefined>) => {
+    return sort_by === sortByValue
+  }
+
+  const handleSort = (sortByValue: Exclude<ProductListConfig['sort_by'], undefined>) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(
+        omit(
+          {
+            ...queryConfig,
+            sort_by: sortByValue
+          },
+          ['order']
+        )
+      ).toString()
+    })
+  }
+
+  const handlePriceOrder = (orderValue: Exclude<ProductListConfig['order'], undefined>) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        sort_by: sortBy.price,
+        order: orderValue
+      }).toString()
+    })
+  }
+
   return (
-    <div className='bg-secondary py-4 px-3'>
+    <div className='bg-gray-300/40 py-4 px-3'>
       <div className='flex flex-wrap items-center justify-between gap-2'>
-        <div className='flex items-center flex-wrap gap-2'>
+        <div className='flex flex-wrap items-center gap-2'>
           <div>Sắp xếp theo</div>
-          {/* Sort option */}
-          <Button className='h-8 px-4 bg-primary text-primary-foreground text-sm hover:bg-primary/80 text-center'>
+          <button
+            className={classNames('h-8 px-4 text-center text-sm capitalize ', {
+              'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.view),
+              'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.view)
+            })}
+            onClick={() => handleSort(sortBy.view)}
+          >
             Phổ biến
-          </Button>
-          <Button className='h-8 px-4 bg-primary-foreground text-muted-foreground text-sm hover:bg-primary/80 hover:text-primary-foreground text-center'>
+          </button>
+          <button
+            className={classNames('h-8 px-4 text-center text-sm capitalize ', {
+              'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.createdAt),
+              'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.createdAt)
+            })}
+            onClick={() => handleSort(sortBy.createdAt)}
+          >
+            Mới nhất
+          </button>
+          <button
+            className={classNames('h-8 px-4 text-center text-sm capitalize ', {
+              'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.sold),
+              'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.sold)
+            })}
+            onClick={() => handleSort(sortBy.sold)}
+          >
             Bán chạy
-          </Button>
-          <Select>
-            <SelectTrigger className='h-8 px-4 capitalize bg-primary-foreground text-muted-foreground text-sm hover:bg-accent hover:text-muted-foreground text-center border'>
-              <SelectValue placeholder='Giá' />
-            </SelectTrigger>
-            <SelectContent position='popper'>
-              <SelectGroup>
-                <SelectLabel>Giá</SelectLabel>
-                <SelectItem value='price:asc'>Giá: Thấp đến Cao</SelectItem>
-                <SelectItem value='price:desc'>Giá: Cao đến Thấp</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          </button>
+          <select
+            className={classNames('h-8  px-4 text-left text-sm capitalize  outline-none ', {
+              'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.price),
+              'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.price)
+            })}
+            value={order || ''}
+            onChange={(event) => handlePriceOrder(event.target.value as Exclude<ProductListConfig['order'], undefined>)}
+          >
+            <option value='' disabled className='bg-white text-black'>
+              Giá
+            </option>
+            <option value={orderConstant.asc} className='bg-white text-black'>
+              Giá: Thấp đến cao
+            </option>
+            <option value={orderConstant.desc} className='bg-white text-black'>
+              Giá: Cao đến thấp
+            </option>
+          </select>
         </div>
-        {/* Pagination */}
+
         <div className='flex items-center'>
           <div>
-            <span className='text-primary'>1</span>
-            <span className='text-muted-foreground'>/9</span>
+            <span className='text-orange'>{page}</span>
+            <span>/{pageSize}</span>
           </div>
-          <div className='ml-2'>
-            <Button
-              className='px-3 h-8 rounded-tl-sm rounded-bl-sm bg-primary-foreground/60 hover:bg-background cursor-not-allowed text-muted-foreground text-sm mr-0'
-              disabled
-              size={'sm'}
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='currentColor'
-                className='size-6'
+          <div className='ml-2 flex'>
+            {page === 1 ? (
+              <span className='flex h-8 w-9 cursor-not-allowed items-center justify-center rounded-tl-sm rounded-bl-sm bg-white/60  shadow hover:bg-slate-100'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='h-3 w-3'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
+                </svg>
+              </span>
+            ) : (
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    page: (page - 1).toString()
+                  }).toString()
+                }}
+                className='flex h-8 w-9  items-center justify-center rounded-tl-sm rounded-bl-sm bg-white  shadow hover:bg-slate-100'
               >
-                <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5 8.25 12l7.5-7.5' />
-              </svg>
-            </Button>
-            <Button
-              className='px-3 h-8 rounded-tr-sm rounded-br-sm bg-primary-foreground/60 hover:bg-background  text-muted-foreground ml-0'
-              size={'sm'}
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='currentColor'
-                className='size-6'
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='h-3 w-3'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
+                </svg>
+              </Link>
+            )}
+            {page === pageSize ? (
+              <span className='flex h-8 w-9 cursor-not-allowed items-center justify-center rounded-tl-sm rounded-bl-sm bg-white/60  shadow hover:bg-slate-100'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='h-3 w-3'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
+                </svg>
+              </span>
+            ) : (
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    page: (page + 1).toString()
+                  }).toString()
+                }}
+                className='flex h-8 w-9  items-center justify-center rounded-tl-sm rounded-bl-sm bg-white  shadow hover:bg-slate-100'
               >
-                <path strokeLinecap='round' strokeLinejoin='round' d='m8.25 4.5 7.5 7.5-7.5 7.5' />
-              </svg>
-            </Button>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='h-3 w-3'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
+                </svg>
+              </Link>
+            )}
           </div>
         </div>
       </div>
