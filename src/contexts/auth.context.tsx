@@ -1,12 +1,12 @@
 import React, { createContext, useState } from 'react'
 import type { AuthContextType } from '~/types/context.types'
 import type { User } from '~/types/user.types'
-import { getAccessToken, getProfile } from '~/utils/auth'
+import { getAccessTokenFromLS, getProfileFromLS } from '~/utils/auth'
 
 const initialAuthContext: AuthContextType = {
-  isAuthenticated: Boolean(getAccessToken()),
+  isAuthenticated: Boolean(getAccessTokenFromLS()),
   setIsAuthenticated: () => null,
-  profile: getProfile(),
+  profile: getProfileFromLS(),
   setProfile: () => null
 }
 
